@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import strategy from 'emojione/emoji.json';
 import createEmojisFromStrategy from '../../utils/createEmojisFromStrategy';
@@ -9,6 +9,7 @@ const emojis = createEmojisFromStrategy(strategy);
 
 export default class EmojiSelect extends Component {
   static propTypes = {
+    PortalComponent: PropTypes.func,
     cacheBustParam: PropTypes.string.isRequired,
     imagePath: PropTypes.string.isRequired,
     imageType: PropTypes.string.isRequired,
@@ -31,6 +32,7 @@ export default class EmojiSelect extends Component {
   };
 
   static defaultProps = {
+    PortalComponent: Fragment,
     selectButtonContent: '☺',
     selectGroups: defaultEmojiGroups,
     toneSelectOpenDelay: 500,
@@ -89,6 +91,7 @@ export default class EmojiSelect extends Component {
       selectButtonContent,
       toneSelectOpenDelay,
       useNativeArt,
+      PortalComponent,
     } = this.props;
     const buttonClassName = this.state.isOpen ?
       theme.emojiSelectButtonPressed :
@@ -103,18 +106,20 @@ export default class EmojiSelect extends Component {
         >
           {selectButtonContent}
         </button>
-        <Popover
-          cacheBustParam={cacheBustParam}
-          imagePath={imagePath}
-          imageType={imageType}
-          theme={theme}
-          store={store}
-          groups={selectGroups}
-          emojis={emojis}
-          toneSelectOpenDelay={toneSelectOpenDelay}
-          isOpen={this.state.isOpen}
-          useNativeArt={useNativeArt}
-        />
+        <PortalComponent>
+          <Popover
+            cacheBustParam={cacheBustParam}
+            imagePath={imagePath}
+            imageType={imageType}
+            theme={theme}
+            store={store}
+            groups={selectGroups}
+            emojis={emojis}
+            toneSelectOpenDelay={toneSelectOpenDelay}
+            isOpen={this.state.isOpen}
+            useNativeArt={useNativeArt}
+          />
+        </PortalComponent>
       </div>
     );
   }
